@@ -18,13 +18,17 @@ def isnumber(num):
     float or string and return it
     """
     try:
-        if num.isdigit() is True:  # verify if num is a str
-            num = int(num)
-        else:
-            num = float(num)  # try to convert to float
-        return num
-    except ValueError:
-        return str(num).replace("_", " ").replace("\"", "")
+        # verify if num is a str
+        return int(num)
+    except Exception:
+        pass
+
+    try:
+        # try to convert to float
+        return float(num)
+    except Exception:
+        if num[0] == "\"" and num[-1] == "\"":
+            return num.replace("_", " ").replace("\"", "")
 
 
 class HBNBCommand(cmd.Cmd):
@@ -145,8 +149,13 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[class_name]()
         for param in params:
             """Use setattr to add parameter to object"""
-            key, value = param.split("=")
-            setattr(new_instance, str(key), isnumber(value))
+            try:
+                key, value = param.split("=")
+                value = isnumber(value)
+                if value:
+                    setattr(new_instance, str(key), value)
+            except Exception:
+                continue
 
         storage.save()
         print(new_instance.id)
