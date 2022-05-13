@@ -12,6 +12,21 @@ from models.amenity import Amenity
 from models.review import Review
 
 
+def isnumber(num):
+    """
+    This functions check is num is int,
+    float or string and return it
+    """
+    try:
+        if num.isdigit() is True:  # verify if num is a str
+            num = int(num)
+        else:
+            num = float(num)  # try to convert to float
+        return num
+    except ValueError:
+        return str(num).replace("_", " ").replace("\"", "")
+
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -19,16 +34,16 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
+        'BaseModel': BaseModel, 'User': User, 'Place': Place,
+        'State': State, 'City': City, 'Amenity': Amenity,
+        'Review': Review
+    }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
-            }
+        'number_rooms': int, 'number_bathrooms': int,
+        'max_guest': int, 'price_by_night': int,
+        'latitude': float, 'longitude': float
+    }
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -73,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] is '{' and pline[-1] is '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,21 +130,41 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+
+        line = args.split(" ")  # obtain the arguments
+        class_name, *params = line  # obtain class name line[0] and other
+
+        if not class_name:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        """Create new instance"""
+        new_instance = HBNBCommand.classes[class_name]()
+        for param in params:
+            """Use setattr to add parameter to object"""
+            key, value = param.split("=")
+            setattr(new_instance, str(key), isnumber(value))
+
         storage.save()
         print(new_instance.id)
         storage.save()
 
     def help_create(self):
         """ Help information for the create method """
-        print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("""
+            Creates a class of any type
+            [Usage]: create <className> or
+            [Usage]: create <Class name> <param 1> <param 2> <param 3>...
+                (with) Param syntax: <key name>=<value>
+                    (Value Types):
+                    - String: "<value>"
+                    - Float: <unit>.<decimal>
+                    - Integer: <number>
+            """
+              )
 
     def do_show(self, args):
         """ Method to show an individual object """
@@ -319,6 +354,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
