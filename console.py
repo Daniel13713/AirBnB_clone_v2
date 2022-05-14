@@ -27,7 +27,8 @@ def isnumber(num):
         # try to convert to float
         return float(num)
     except Exception:
-        return num.replace("_", " ").replace("\"", "")
+        if num[0] == "\"" and num[-1] == "\"":
+            return num.replace("_", " ").replace("\"", "")
 
 
 class HBNBCommand(cmd.Cmd):
@@ -158,7 +159,6 @@ class HBNBCommand(cmd.Cmd):
 
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
