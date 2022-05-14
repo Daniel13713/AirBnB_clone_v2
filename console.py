@@ -27,8 +27,8 @@ def isnumber(num):
         # try to convert to float
         return float(num)
     except Exception:
-        if num[0] == "\"" and num[-1] == "\"":
-            return num.replace("_", " ").replace("\"", "")
+        # if num[0] == "\"" and num[-1] == "\"":
+        return num.replace("_", " ").replace("\"", "")
 
 
 class HBNBCommand(cmd.Cmd):
