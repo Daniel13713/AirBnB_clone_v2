@@ -11,6 +11,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review"""
 
+
 class DBStorage():
     """
     -----------------------------------------------------------
@@ -31,19 +32,24 @@ class DBStorage():
         """Instanciatize objects"""
 
         self.__engine = create_engine(
-        'mysql+mysqldb://{}:{}@{}/{}'.format(
-            os.getenv("HBNB_MYSQL_USER"),
-            os.getenv("HBNB_MYSQL_PWD"),
-            os.getenv("HBNB_MYSQL_HOST"),
-            os.getenv("HBNB_MYSQL_DB")
+            'mysql+mysqldb://{}:{}@{}/{}'.format(
+                os.getenv("HBNB_MYSQL_USER"),
+                os.getenv("HBNB_MYSQL_PWD"),
+                os.getenv("HBNB_MYSQL_HOST"),
+                os.getenv("HBNB_MYSQL_DB")
             ), pool_pre_ping=True)
-        #Base.metadata.create_all(self.__engine)
-        self.__session = sessionmaker(bind=self.__engine)
+        # Base.metadata.create_all(self.__engine)
+        # self.__session = sessionmaker(bind=self.__engine)
 
-        """drop all tables if the environment variable HBNB_ENV is equal to test"""
+        """
+        -----------------------------------
+        drop all tables if the environment
+        variable HBNB_ENV is equal to test
+        -----------------------------------
+        """
         if os.getenv("HBNB_ENV") == "test":
             with self.__session as session:
-                session.drop(self.__engine, checkfirst=True)
+                session.drop_all(self.__engine, checkfirst=True)
 
     def all(self, cls=None):
         """
@@ -57,11 +63,11 @@ class DBStorage():
         session = self.__session()
         new_dic = {}
 
-        if cls == None:
+        if cls is None:
             return self.__session.query()
         else:
             return self.__session.query(cls).all()
-            
+
     def new(self, obj):
         """
         ---------------------------------------------------------------
@@ -69,7 +75,7 @@ class DBStorage():
         ---------------------------------------------------------------
         """
         self.__session.add(obj)
-        #session.commit()
+        # session.commit()
 
     def save(self):
         """
@@ -78,7 +84,6 @@ class DBStorage():
         ---------------------------------------------------------------
         """
         self.__session.commit()
-        #print("session:  ---", self.__session.registry.registry.__dict__)
 
     def delete(self, obj=None):
         """

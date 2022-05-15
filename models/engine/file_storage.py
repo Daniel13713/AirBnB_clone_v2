@@ -9,6 +9,7 @@ class FileStorage:
     __objects = {}
 
     """Change made from def all(self) to def all(self, cls=None)"""
+
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls is None:
@@ -45,10 +46,10 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
@@ -58,6 +59,7 @@ class FileStorage:
         except FileNotFoundError:
             pass
     """Added def delete"""
+
     def delete(self, obj=None):
         """delete obj from __objects if it is inside"""
         if obj is not None:
