@@ -5,7 +5,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Float, ForeignKey, Integer, String
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """ A place to stay """
     if models.storecondition == "db":
         __tablename__ = "places"

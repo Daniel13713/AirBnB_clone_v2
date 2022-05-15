@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from models.city import Place
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """This class defines a user by various attributes"""
     if models.storecondition == "db":
         __tablename__ = "users"
