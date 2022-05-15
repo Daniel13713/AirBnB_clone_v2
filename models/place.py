@@ -1,12 +1,9 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-import models
-import sqlalchemy
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
+from models.base_model import BaseModel
 
 
-class Place(BaseModel, Base):
+class Place(BaseModel):
     """ A place to stay """
     city_id = ""
     user_id = ""
