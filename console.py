@@ -248,7 +248,10 @@ class HBNBCommand(cmd.Cmd):
         Usage: $ all ClassName or $ all
         """
         args = arg.split()
-        store = storage.all(HBNBCommand.classes[args[0]])
+        if len(args) == 0:
+            store = storage.all()
+        else:
+            store = storage.all(HBNBCommand.classes[args[0]])
         new_list = []
         """
         Note:
