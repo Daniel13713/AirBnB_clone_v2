@@ -9,7 +9,7 @@ from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import time
 
-if models.storage_t == "db":
+if models.storecondition == "db":
     Base = declarative_base()
 else:
     Base = object
@@ -17,7 +17,7 @@ else:
 
 class BaseModel:
     """A base class for all hbnb models"""
-    if models.storage_t == "db":
+    if models.storecondition == "db":
         id = Column(String(60), nullable=False, primary_key=True)
         created_at = Column(
             DateTime, nullable=False, default=datetime.utcnow())
@@ -56,7 +56,7 @@ class BaseModel:
         from models import storage
         self.updated_at = datetime.now()
         storage.new(self)
-        storage.save
+        storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
@@ -71,3 +71,14 @@ class BaseModel:
             new_dic.pop("_sa_instance_state")
 
         return new_dic
+
+    def delete(self):
+        """
+        ---------------------------------------------
+        delete the current instance from the storage
+        (models.storage) by calling the method delete
+        ---------------------------------------------
+        """
+        pass
+
+
