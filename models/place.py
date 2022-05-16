@@ -1,15 +1,22 @@
 #!/usr/bin/python
 """ holds class Place"""
+from subprocess import list2cmdline
 import models
 from models.base_model import BaseModel, Base
 from os import getenv
 import sqlalchemy
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table, all_
 from models.review import Review
 from sqlalchemy.orm import relationship
 
 
 storecondition = getenv("HBNB_TYPE_STORAGE")
+
+if storecondition == 'db':
+    place_amenity = Table('place_amenity', Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'), primary__key=True), 
+    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary__key=True))
+
 
 
 class Place(BaseModel, Base):
@@ -31,6 +38,7 @@ class Place(BaseModel, Base):
             backref="place",
             cascade="all, delete",
             passive_deletes=True)
+        amenities = relationship("Amenity", secondary="place_amenity", backref="place_amenities", viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -49,8 +57,19 @@ class Place(BaseModel, Base):
             """Returns a list of City instances with state_id equals
             to the current State.id"""
             reviewlist = []
-            allreviews = storage.all(Review)
+            allreviews = models.storage.all(Review)
             for review in allreviews.values():
                 if review.review_id == self.id:
                     reviewlist.append(review)
             return reviewlist
+
+        @property
+        def amenities(self):
+            """Returns the list of amenities"""
+            from models.amenity import Amenity
+            list_amenities = []
+            all_amenities = models.storage.all(Amenity)
+            for amenity in all_amenities.values():
+                if amenity.place_id == self.id:
+                    list_amenities.append(amenity)
+            return list_amenities
