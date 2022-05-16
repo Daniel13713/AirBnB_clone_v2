@@ -12,26 +12,6 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-def isnumber(num):
-    """
-    This functions check is num is int,
-    float or string and return it
-    """
-    num = num.strip("\"'").replace("_", " ")
-    try:
-        # verify if num is a str
-        return int(num)
-    except Exception:
-        pass
-
-    try:
-        # try to convert to float
-        return float(num)
-    except Exception:
-        # if num[0] == "\"" and num[-1] == "\"":
-        return num
-
-
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -50,10 +30,28 @@ class HBNBCommand(cmd.Cmd):
         'latitude': float, 'longitude': float
     }
 
+    def isnumber(self, num):
+        """
+        This functions check is num is int,
+        float or string and return it
+        """
+        try:
+            # verify if num is a str
+            return int(num)
+        except Exception:
+            pass
+
+        try:
+            # try to convert to float
+            return float(num)
+        except Exception:
+            # if num[0] == "\"" and num[-1] == "\"":
+            return str(num)
+
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
-            print('(hbnb) ', end="")
+            print('(hbnb)')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -152,9 +150,9 @@ class HBNBCommand(cmd.Cmd):
             """Use setattr to add parameter to object"""
             try:
                 key, value = param.split("=", 1)
-                value = isnumber(value)
-                if value:
-                    setattr(new_instance, str(key), value)
+                value = value.strip("\"'").replace("_", " ")
+                value = self.isnumber(value)
+                setattr(new_instance, str(key), value)
             except Exception:
                 continue
 
