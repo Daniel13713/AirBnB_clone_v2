@@ -19,12 +19,6 @@ class DBStorage():
     -----------------------------------------------------------
     """
 
-    """classes = {
-        'BaseModel': BaseModel, 'User': User, 'Place': Place,
-        'State': State, 'City': City, 'Amenity': Amenity,
-        'Review': Review
-    }"""
-
     __engine = None
     __session = None
 
@@ -60,13 +54,33 @@ class DBStorage():
         this method must return a dictionary
         --------------------------------------------------------
         """
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+        classes = {
+            'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         session = self.__session()
         new_dic = {}
 
         if cls is None:
-            return self.__session.query()
+            for className, value in classes.items():
+                data = self.__session.query(value)
+                for obj in data:
+                    key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                    new_dic.update({key: obj})
         else:
-            return self.__session.query(cls).all()
+            data = self.__session.query(cls).all()
+            for obj in data:
+                key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                new_dic.update({key: obj})
+
+        return new_dic
 
     def new(self, obj):
         """

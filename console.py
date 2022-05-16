@@ -243,28 +243,17 @@ class HBNBCommand(cmd.Cmd):
         Usage: $ all ClassName or $ all
         """
         args = arg.split()
+        new_list = []
         if len(args) == 0:
             store = storage.all()
-        else:
-            store = storage.all(HBNBCommand.classes[args[0]])
-        new_list = []
-        """
-        Note:
-        - In db store is a lits
-        - In file store is a dictionary
-        """
-        if storecondition == "db":
-            # create a dictionary with equal key and value
-            store = dict(zip(store, store))
-        if len(args) == 0:
             for a in store.values():
-                new_list.append(a.__str__())
+                new_list.append(str(a))
             print(new_list)
-
         elif args[0] in HBNBCommand.classes:
+            store = storage.all(HBNBCommand.classes[args[0]])
             for a in store.values():
                 if a.__class__.__name__ == args[0]:
-                    new_list.append(a.__str__())
+                    new_list.append(str(a))
             print(new_list)
         else:
             print("** class doesn't exist **")
