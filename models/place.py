@@ -9,9 +9,12 @@ from models.review import Review
 from sqlalchemy.orm import relationship
 
 
+storecondition = getenv("HBNB_TYPE_STORAGE")
+
+
 class Place(BaseModel, Base):
     """ A place to stay """
-    if models.storecondition == 'db':
+    if storecondition == 'db':
         __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)

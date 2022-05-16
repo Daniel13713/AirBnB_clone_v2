@@ -3,13 +3,17 @@
 import models
 from models.base_model import BaseModel, Base
 import sqlalchemy
+from os import getenv
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
+storecondition = getenv("HBNB_TYPE_STORAGE")
+
+
 class User(BaseModel, Base):
     """Representation of a user """
-    if models.storecondition == 'db':
+    if storecondition == 'db':
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)

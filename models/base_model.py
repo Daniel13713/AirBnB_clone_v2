@@ -9,7 +9,11 @@ from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import time
 
-if models.storecondition == "db":
+
+storecondition = getenv("HBNB_TYPE_STORAGE")
+
+
+if storecondition == "db":
     Base = declarative_base()
 else:
     Base = object
@@ -17,7 +21,7 @@ else:
 
 class BaseModel:
     """A base class for all hbnb models"""
-    if models.storecondition == "db":
+    if storecondition == "db":
         id = Column(String(60), nullable=False, primary_key=True)
         created_at = Column(
             DateTime, nullable=False, default=datetime.utcnow())
