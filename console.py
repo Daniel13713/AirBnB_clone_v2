@@ -30,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
         'latitude': float, 'longitude': float
     }
 
-    def isnumber(self, num):
+    def isnumber(self, num: str):
         """
         This functions check is num is int,
         float or string and return it
@@ -46,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
             return float(num)
         except Exception:
             # if num[0] == "\"" and num[-1] == "\"":
-            return str(num)
+            return num
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -148,17 +148,13 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[class_name]()
         for param in params:
             """Use setattr to add parameter to object"""
-            try:
-                key, value = param.split("=", 1)
-                value = value.strip("\"'").replace("_", " ")
-                value = self.isnumber(value)
-                setattr(new_instance, str(key), value)
-            except Exception:
-                continue
+            key, value = param.split("=", 1)
+            value = value.strip("\"'").replace("_", " ")
+            value = self.isnumber(value)
+            setattr(new_instance, key, value)
 
-        storage.new(new_instance)
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
