@@ -144,21 +144,20 @@ class HBNBCommand(cmd.Cmd):
         elif class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
-        params = line[1:]  # obtain class name line[0] and other
-
         """Create new instance"""
         new_instance = HBNBCommand.classes[class_name]()
-        for param in params:
+        for i in range(1, len(line)):
             """Use setattr to add parameter to object"""
             try:
-                key, value = param.split("=", 1)
-                value = value.replace("_", " ")
+                params = line[i].split("=")
+                key = params[0]
+                value = params[1]
                 value = eval(value)
                 if type(value) in HBNBCommand.typesValues:
                     if type(value) == str:
-                        value = value.replace("\"", "")
+                        value = value.replace("_", " ")
                     setattr(new_instance, key, value)
+                continue
             except Exception:
                 continue
 
