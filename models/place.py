@@ -13,10 +13,19 @@ from sqlalchemy.orm import relationship
 storecondition = getenv("HBNB_TYPE_STORAGE")
 
 if storecondition == 'db':
-    place_amenity = Table('place_amenity', Base.metadata,
-    Column('place_id', String(60), ForeignKey('places.id'), primary__key=True), 
-    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary__key=True))
-
+    place_amenity = Table(
+        'place_amenity',
+        Base.metadata,
+        Column(
+            'place_id',
+            String(60),
+            ForeignKey('places.id'),
+            primary_key=True),
+        Column(
+            'amenity_id',
+            String(60),
+            ForeignKey('amenities.id'),
+            primary_key=True))
 
 
 class Place(BaseModel, Base):
@@ -38,7 +47,11 @@ class Place(BaseModel, Base):
             backref="place",
             cascade="all, delete",
             passive_deletes=True)
-        amenities = relationship("Amenity", secondary="place_amenity", backref="place_amenities", viewonly=False)
+        amenities = relationship(
+            "Amenity",
+            secondary=place_amenity,
+            back_populates="place_amenities",
+            viewonly=False)
     else:
         city_id = ""
         user_id = ""
