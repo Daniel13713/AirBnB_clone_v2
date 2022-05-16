@@ -17,6 +17,7 @@ def isnumber(num):
     This functions check is num is int,
     float or string and return it
     """
+    num = num.strip("\"'").replace("_", " ")
     try:
         # verify if num is a str
         return int(num)
@@ -28,7 +29,7 @@ def isnumber(num):
         return float(num)
     except Exception:
         # if num[0] == "\"" and num[-1] == "\"":
-        return num.replace("_", " ").replace("\"", "")
+        return num
 
 
 class HBNBCommand(cmd.Cmd):
@@ -150,7 +151,7 @@ class HBNBCommand(cmd.Cmd):
         for param in params:
             """Use setattr to add parameter to object"""
             try:
-                key, value = param.split("=")
+                key, value = param.split("=", 1)
                 value = isnumber(value)
                 if value:
                     setattr(new_instance, str(key), value)
