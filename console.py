@@ -24,6 +24,7 @@ class HBNBCommand(cmd.Cmd):
         'Review': Review
     }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
+    typesValues = [str, int, float]
     types = {
         'number_rooms': int, 'number_bathrooms': int,
         'max_guest': int, 'price_by_night': int,
@@ -45,8 +46,9 @@ class HBNBCommand(cmd.Cmd):
             # try to convert to float
             return float(num)
         except Exception:
-            # if num[0] == "\"" and num[-1] == "\"":
-            return num
+            if num[0] == "\"" and num[-1] == "\"":
+                num = num.strip("\"'").replace("_", " ")
+                return eval(num)
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -149,10 +151,16 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[class_name]()
         for param in params:
             """Use setattr to add parameter to object"""
-            key, value = param.split("=", 1)
-            value = value.strip("\"'").replace("_", " ")
-            value = self.isnumber(value)
-            setattr(new_instance, key, value)
+            try:
+                key, value = param.split("=", 1)
+                value = value.replace("_", " ")
+                value = eval(value)
+                if type(value) in HBNBCommand.typesValues:
+                    if type(value) == str:
+                        value = value.replace("\"", "")
+                    setattr(new_instance, key, value)
+            except Exception:
+                continue
 
         print(new_instance.id)
         new_instance.save()
