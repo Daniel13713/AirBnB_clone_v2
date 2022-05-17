@@ -1,7 +1,6 @@
 #!/usr/bin/python
 """ holds class Place"""
 from subprocess import list2cmdline
-import models
 from models.base_model import BaseModel, Base
 from os import getenv
 import sqlalchemy
@@ -49,9 +48,10 @@ class Place(BaseModel, Base):
             passive_deletes=True)
         amenities = relationship(
             "Amenity",
-            secondary=place_amenity,
-            back_populates="place_amenities",
+            secondary='place_amenity',
+            backref="place_amenities",
             viewonly=False)
+        amenity_ids = []
     else:
         city_id = ""
         user_id = ""
@@ -65,24 +65,34 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-        @property
-        def reviews(self):
-            """Returns a list of City instances with state_id equals
-            to the current State.id"""
-            reviewlist = []
-            allreviews = models.storage.all(Review)
-            for review in allreviews.values():
-                if review.review_id == self.id:
-                    reviewlist.append(review)
-            return reviewlist
+    @property
+    def reviews(self):
+        """Returns a list of City instances with state_id equals
+        to the current State.id"""
+        import models
+        reviewlist = []
+        allreviews = models.storage.all(Review)
+        for review in allreviews.values():
+            if review.review_id == self.id:
+                reviewlist.append(review)
+        return reviewlist
 
-        @property
-        def amenities(self):
-            """Returns the list of amenities"""
-            from models.amenity import Amenity
-            list_amenities = []
-            all_amenities = models.storage.all(Amenity)
-            for amenity in all_amenities.values():
-                if amenity.place_id == self.id:
-                    list_amenities.append(amenity)
-            return list_amenities
+    @property
+    def amenities(self):
+        """Returns the list of amenities"""
+        import models
+        from models.amenity import Amenity
+        list_amenities = []
+        all_amenities = models.storage.all(Amenity)
+        for amenity in all_amenities.values():
+            if amenity.id in self.amenity_ids:
+                list_amenities.append(amenity)
+        return list_amenities
+
+    @amenities.setter
+    def amenities(self, value):
+        """Returns the list of amenities"""
+        from models.amenity import Amenity
+        print("in setter->", value)
+        if isinstance(value, Amenity):
+            self.amenity_ids.append(value.id)

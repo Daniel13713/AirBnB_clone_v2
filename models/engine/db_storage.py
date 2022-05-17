@@ -55,7 +55,7 @@ class DBStorage():
         --------------------------------------------------------
         """
         from models.user import User
-        from models.place import Place
+        from models.place import Place, place_amenity
         from models.state import State
         from models.city import City
         from models.amenity import Amenity
@@ -70,7 +70,7 @@ class DBStorage():
 
         if cls is None:
             for className, value in classes.items():
-                data = self.__session.query(value)
+                data = self.__session.query(value).all()
                 for obj in data:
                     key = "{}.{}".format(obj.__class__.__name__, obj.id)
                     new_dic.update({key: obj})
