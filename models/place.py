@@ -5,7 +5,6 @@ from models.base_model import BaseModel, Base
 from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table, all_
-from models.review import Review
 from sqlalchemy.orm import relationship
 
 
@@ -30,6 +29,7 @@ if storecondition == 'db':
 class Place(BaseModel, Base):
     """ A place to stay """
     if storecondition == 'db':
+        from models.review import Review
         __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
