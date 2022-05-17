@@ -3,14 +3,16 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models import storage
 from models.city import City
-import models
+from os import getenv
+
+
+storecondition = getenv("HBNB_TYPE_STORAGE")
 
 
 class State(BaseModel, Base):
     """ State class """
-    if models.storecondition == "db":
+    if storecondition == "db":
         __tablename__ = "states"
         name = Column(String(128), nullable=False)
         cities = relationship("City", backref="states", cascade="all, delete",
@@ -18,9 +20,10 @@ class State(BaseModel, Base):
     else:
         name = ""
 
-    if models.storecondition != "db":
+    if storecondition != "db":
         @property
         def cities(self):
+            from models import storage
             """Returns a list of City instances with state_id equals
             to the current State.id"""
             citylist = []
