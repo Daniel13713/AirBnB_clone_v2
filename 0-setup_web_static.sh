@@ -43,9 +43,8 @@ echo "server {
                 root /var/www/riodu.tech/html;
                 internal;
         }
-        location /hbnb_static {
-                alias /data/web_static/current;
-		index index.html;
+        location /hbnb_static/ {
+                alias /data/web_static/current/;
         }
         add_header X-Served-By 3811-web-01;
 }
