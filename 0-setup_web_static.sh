@@ -14,7 +14,13 @@ fi
 sudo mkdir -p /data/web_static/releases/test/
 
 # create index.html file
-sudo echo "Hello There" > /data/web_static/releases/test/index.html
+sudo echo "<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>" > /data/web_static/releases/test/index.html
 
 #create symbolic link and recreated if exits
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
