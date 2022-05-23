@@ -34,27 +34,23 @@ def do_deploy(archive_path):
         return False
     try:
         file = archive_path.split("/")[1]
+        name = file.replace(".tgz", "")
+        path_data = "/data/web_static/releases/{}".format(name)
         # Upload the file to remotes servers
         put(archive_path, "/tmp", use_sudo=True)
         # create folder with name of the file .tgz without extension
-        run("""
-            mkdir -p /data/web_static/releases/{}
-            """.format(file.replace(".tgz", "")))
+        run("mkdir -p {}".format(path_data))
         # Uncomprese the file .tgz
-        run("tar xvzf /tmp/{0} -C /data/web_static/releases/{1}".format(
-            file, file.replace(".tgz", "")))
+        run("tar xvzf /tmp/{0} -C {1}".format(file, path_data))
         # delete file .tgz
         run("rm /tmp/{}".format(file))
         # move all data from web_static to ..
-        with cd("""
-            /data/web_static/releases/{}/web_static
-                """.format(file.replace(".tgz", ""))):
+        with cd("{}/web_static".format(path_data)):
             run("mv * ../")
         # delete symbolix link and create a new
-        run("rm -rf //data/web_static/current")
-        run("""
-            ln -sf /data/web_static/releases/{} /data/web_static/current
-            """.format(file.replace(".tgz", "")))
+        run("rm -rf /data/web_static/current")
+        run("ln -sf {} /data/web_static/current".format(path_data))
+        print("New version deployed!")
         return True
     except Exception as err:
         print(err)
