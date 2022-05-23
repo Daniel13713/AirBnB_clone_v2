@@ -8,6 +8,11 @@ output=$?
 if [ ! "$output" = 0 ] || [ ! "$status" = installed ];
 then
     sudo apt install "$pkg" -y
+    #create folder with for each domain
+    sudo mkdir -p /var/www/riodu.tech/html
+
+    #unlinks the default file
+    unlink /etc/nginx/sites-enabled/default
 fi
 
 # create folders
@@ -28,12 +33,13 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Give ownership to user and group ubuntu
 sudo chown -R ubuntu:ubuntu /data/
+sudo chown -R ubuntu:ubuntu /data/web_static/releases/test/index.html
 
 #create config file
 echo "server {
         listen 80 default_server;
         index index.html;
-        server_name _;
+        server_name riodu.tech;
         root /var/www/riodu.tech/html;
         location /redirect_me {
       return 301 https://www.youtube.com/watch?v=hjpF8ukSrvk&ab_channel=PinkFloyd-Topic\$request_uri;
@@ -46,12 +52,12 @@ echo "server {
         location /hbnb_static/ {
                 alias /data/web_static/current/;
         }
-        add_header X-Served-By 3811-web-01;
+        add_header X-Served-By $HOSTNAME;
 }
 " | sudo tee /etc/nginx/conf.d/riodu.tech.conf > /dev/null
 
 #creates the index file
-echo "Hello World from du.tech (server 1)" | sudo tee /var/www/riodu.tech/html/index.html > /dev/null
+echo "Hello World from du.tech $HOSTNAME" | sudo tee /var/www/riodu.tech/html/index.html > /dev/null
 
 #error page 404
 echo "Ceci n'est pas une page" | sudo tee /var/www/riodu.tech/html/du_404.html > /dev/null
