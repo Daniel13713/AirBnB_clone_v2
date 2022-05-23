@@ -15,13 +15,13 @@ sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
 
 # create index.html file
-sudo echo "<html>
+echo "<html>
   <head>
   </head>
   <body>
     Holberton School
   </body>
-</html>" > /data/web_static/releases/test/index.html
+</html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 #create symbolic link and recreated if exits
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
