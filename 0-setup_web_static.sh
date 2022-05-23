@@ -3,7 +3,7 @@
 
 # Install nginx if not already installed
 pkg=nginx
-status="$(dpkg-query -W --showformat='${db:Status-Status}' "$pkg" 2>&1)"
+status="$(dpkg-query -W --showformat="${db:Status-Status}" "$pkg" 2>&1)"
 output=$?
 if [ ! "$output" = 0 ] || [ ! "$status" = installed ];
 then
