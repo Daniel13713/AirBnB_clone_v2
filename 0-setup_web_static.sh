@@ -48,13 +48,13 @@ echo "server {
         }
         add_header X-Served-By 3811-web-01;
 }
-" > /etc/nginx/conf.d/riodu.tech.conf
+" | sudo tee /etc/nginx/conf.d/riodu.tech.conf /dev/null
 
 #creates the index file
-echo "Hello World from du.tech (server 1)" > /var/www/riodu.tech/html/index.html;
+echo "Hello World from du.tech (server 1)" | sudo tee /var/www/riodu.tech/html/index.html /dev/null
 
 #error page 404
-echo "Ceci n'est pas une page" > /var/www/riodu.tech/html/du_404.html;
+echo "Ceci n'est pas une page" | sudo tee /var/www/riodu.tech/html/du_404.html /dev/null
 
 #restart nginx
 sudo service nginx restart
