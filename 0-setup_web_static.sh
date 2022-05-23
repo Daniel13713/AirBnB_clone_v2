@@ -12,6 +12,7 @@ fi
 
 # create folders
 sudo mkdir -p /data/web_static/releases/test/
+sudo mkdir -p /data/web_static/shared/
 
 # create index.html file
 sudo echo "<html>
