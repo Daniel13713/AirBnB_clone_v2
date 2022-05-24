@@ -36,7 +36,7 @@ def c_route(text):
     return "C {}".format(text)
 
 
-@app.route("/python")
+@app.route("/python/")
 @app.route("/python/<text>")
 def python_route(text="is cool"):
     """
