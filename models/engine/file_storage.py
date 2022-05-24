@@ -36,7 +36,13 @@ class FileStorage:
             json.dump(new_dict, file)
 
     def reload(self):
-        """Loads storage dictionary from file"""
+        """
+        ------------------------------------------
+        Loads storage dictionary from file
+        Deserializing the JSON file to objects
+        JSON -> OBJECT_PYTHON (deserializing)
+        ------------------------------------------
+        """
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
@@ -71,3 +77,12 @@ class FileStorage:
             key = obj.__class__.__name__ + '.' + obj.id
             if key in self.__objects:
                 del self.__objects[key]
+
+    def close(self):
+        """
+        ---------------------------------------
+        Call deserilization reaload() method
+        ---------------------------------------
+        """
+
+        self.reload()
