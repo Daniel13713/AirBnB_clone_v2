@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 """ Routes """
 
-from __init__ import app
+from flask import Flask
 
+"""Create an instance from app.create_app()"""
+app = Flask(__name__)
 
 app.url_map.strict_slashes = False
 
