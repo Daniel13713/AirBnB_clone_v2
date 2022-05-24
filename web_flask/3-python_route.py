@@ -43,7 +43,7 @@ def python_route(text="is cool"):
     Route index
     """
     text = text.replace("_", " ")
-    return "Pyhton {}".format(text)
+    return "Python {}".format(text)
 
 
 if __name__ == "__main__":
