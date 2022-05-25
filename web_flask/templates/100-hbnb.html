@@ -9,7 +9,9 @@
 	<link rel="stylesheet" href="../static/styles/4-common.css" />
 	<link rel="stylesheet" href="../static/styles/3-header.css" />
 	<link rel="stylesheet" href="../static/styles/3-footer.css" />
+	<link rel="stylesheet" href="../static/styles/8-places.css" />
 	<link rel="stylesheet" href="../static/styles/6-filters.css" />
+
 </head>
 
 <body>
@@ -34,7 +36,7 @@
 							{% endfor %}
 						</ul>
 					</li>
-					{% endfor %} 
+					{% endfor %}
 				</ul>
 			</div>
 			<div class="filter_amenities">
@@ -49,6 +51,39 @@
 				</ul>
 			</div>
 
+		</section>
+		<section class="places">
+			<h1>Places</h1>
+			{% for place in places %}
+			<article>
+				<div class="headline">
+					<h2>{{ place.name }}</h2>
+					<div class="price_by_night">${{ place.price_by_night }}</div>
+
+				</div>
+				<div class="information">
+					<div class="max_guest">
+						<div class="guest_icon"></div>
+						<p>{{ place.max_guest }} Guests</p>
+					</div>
+					<div class="number_rooms">
+						<div class="bed_icon"></div>
+						<p>{{ place.number_rooms }} Bedroom</p>
+					</div>
+					<div class="number_bathrooms">
+						<div class="bath_icon"></div>
+						<p>{{ place.number_bathrooms }} Bathroom</p>
+					</div>
+				</div>
+				<div class="user"><b>Owner</b>: {{
+					users.get("User.{}".format(place.user_id)).first_name+"
+					"+users.get("User.{}".format(place.user_id)).last_name
+					}}</div>
+				<div class="description">
+					{{ place.description }}
+				</div>
+			</article>
+			{% endfor %}
 		</section>
 	</div>
 	<footer>
