@@ -29,7 +29,8 @@ def states():
     """
     from models.state import State
 
-    states = storage.all(State).values()
+    states = storage.all(State).values()  # all states
+    states = sorted(states, key=lambda d: d.name)  # sort by name
     return render_template("7-states_list.html", states=states)
 
 
