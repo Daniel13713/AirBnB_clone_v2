@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 app.url_map.strict_slashes = False
 
+
 @app.teardown_appcontext
 def teardown_db(exception):
     """
@@ -17,6 +18,7 @@ def teardown_db(exception):
     -----------------------------------------------------------------
     """
     storage.close()
+
 
 @app.route("/states_list")
 def states():
