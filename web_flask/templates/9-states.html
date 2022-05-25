@@ -14,7 +14,7 @@
             {% endfor %}
         </UL>
     {% elif state %}
-        <H1>{{ state.name }}</H1>
+        <H1>State: {{ state.name }}</H1>
         <H3>Cities:</H3>
         <UL>
             {% for city in state.cities %}

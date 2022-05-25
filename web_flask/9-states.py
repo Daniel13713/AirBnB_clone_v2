@@ -34,18 +34,17 @@ def states(id=0):
     states = sorted(states, key=lambda d: d.name)  # sort states by name
     ids = [state.id for state in states]
     if id == 0:
-        response = make_response(
-            render_template(
+        response = render_template(
                 "9-states.html",
-                states=states))
+                states=states)
     elif id in ids:
         index = ids.index(id)
         state = states[index]
         state.cities = sorted(state.cities,
                               key=lambda d: d.name)  # sort cities by name
-        response = make_response(render_template("9-states.html", state=state))
+        response = render_template("9-states.html", state=state)
     else:
-        response = make_response(render_template("9-states.html"))
+        response = render_template("9-states.html")
 
     return response
 
