@@ -21,8 +21,7 @@ def teardown_db(exception):
 
 
 @app.route("/states")
-@app.route("/states/<id>")
-def states(id=0):
+def states():
     """
     -------------------
       Route of states
@@ -32,12 +31,24 @@ def states(id=0):
 
     states = storage.all(State).values()  # all states
     states = sorted(states, key=lambda d: d.name)  # sort states by name
+    response = render_template("9-states.html", states=states)
+
+    return response
+
+
+@app.route("/states/<id>")
+def cities_states(id):
+    """
+    ---------------------------
+      Route of cities by state
+    ---------------------------
+    """
+    from models.state import State
+
+    states = storage.all(State).values()  # all states
+    states = sorted(states, key=lambda d: d.name)  # sort states by name
     ids = [state.id for state in states]
-    if id == 0:
-        response = render_template(
-                "9-states.html",
-                states=states)
-    elif id in ids:
+    if id in ids:
         index = ids.index(id)
         state = states[index]
         state.cities = sorted(state.cities,
